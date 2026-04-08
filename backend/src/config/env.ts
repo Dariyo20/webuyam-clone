@@ -23,5 +23,10 @@ export const config = {
   JWT_SECRET: requireEnv('JWT_SECRET'),
   PORT: parseInt(process.env['PORT'] ?? '5000', 10),
   NODE_ENV: process.env['NODE_ENV'] ?? 'development',
-  CORS_ORIGIN: process.env['CORS_ORIGIN'] ?? 'http://localhost:5173',
+  // CLIENT_URL may be comma-separated for multiple allowed origins,
+  // e.g. "https://webuyam.vercel.app,https://staging.webuyam.vercel.app"
+  CLIENT_URL: (process.env['CLIENT_URL'] ?? 'http://localhost:5173')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean),
 } as const;

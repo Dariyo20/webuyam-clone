@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: webuyam-api
+    env: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false   # set in Render dashboard
+      - key: JWT_SECRET
+        sync: false   # set in Render dashboard
+      - key: CLIENT_URL
+        sync: false   # set in Render dashboard (your frontend URL)
+      # PORT is injected automatically by Render — do not set it manually

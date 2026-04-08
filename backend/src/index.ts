@@ -18,7 +18,8 @@ const app = express();
 // ─── Global middleware ────────────────────────────────────────────────────────
 app.use(
   cors({
-    origin: config.CORS_ORIGIN,
+    // Accepts a single origin or a comma-separated list set via CLIENT_URL
+    origin: config.CLIENT_URL.length === 1 ? config.CLIENT_URL[0] : config.CLIENT_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -28,8 +29,8 @@ app.use(morgan(config.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json());
 
 // ─── Health check ─────────────────────────────────────────────────────────────
-app.get('/health', (_req, res) => {
-  res.json({ success: true, data: { status: 'ok', env: config.NODE_ENV } });
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', env: config.NODE_ENV });
 });
 
 // ─── API routes ───────────────────────────────────────────────────────────────

@@ -27,9 +27,9 @@ The server starts at `http://localhost:5000`.
 |---|---|---|---|
 | `MONGODB_URI` | **Yes** | — | MongoDB Atlas connection string |
 | `JWT_SECRET` | **Yes** | — | JWT signing secret (32+ chars recommended) |
-| `PORT` | No | `5000` | HTTP server port |
+| `PORT` | No | `5000` | HTTP server port (Render sets this automatically) |
 | `NODE_ENV` | No | `development` | `development` or `production` |
-| `CORS_ORIGIN` | No | `http://localhost:5173` | Allowed frontend origin |
+| `CLIENT_URL` | No | `http://localhost:5173` | Allowed frontend origin(s), comma-separated |
 
 The server **crashes on startup** if `MONGODB_URI` or `JWT_SECRET` are missing — no silent failures.
 
@@ -94,7 +94,7 @@ Replace `TOKEN` and `PRODUCT_ID` with values from your responses.
 
 ```bash
 # ── Health ──────────────────────────────────────────────────────────────────
-curl http://localhost:5000/health
+curl http://localhost:5000/api/health
 
 # ── Auth ────────────────────────────────────────────────────────────────────
 # Register
@@ -186,3 +186,48 @@ src/
 - **Validation middleware** — Zod `parseAsync` validates `req.body`, `req.params`, and `req.query` together; returns 400 with per-field `details` on failure.
 - **Cart subdocument** — cart items are embedded in the Cart document rather than a separate collection. Faster reads at this scale; avoids a join.
 - **JWT in response body** — the frontend stores the token in Zustand + localStorage. For production, httpOnly cookies with CSRF protection would be preferred (documented in the top-level README).
+
+---
+
+## Deploying to Render
+
+The repo includes a `render.yaml` at the root that configures a Render web service pointing at the `backend/` subdirectory.
+
+### Steps
+
+1. **Push this branch to GitHub** (if not already done).
+
+2. **Create a new Web Service** in the [Render dashboard](https://dashboard.render.com):
+   - Connect your GitHub repo.
+   - Render detects `render.yaml` automatically — confirm the settings it imports.
+
+3. **Set secret environment variables** in the Render dashboard (these are marked `sync: false` in `render.yaml` so they are never committed):
+
+   | Key | Value |
+   |---|---|
+   | `MONGODB_URI` | Your MongoDB Atlas connection string |
+   | `JWT_SECRET` | A long random secret (32+ chars) |
+   | `CLIENT_URL` | Your deployed frontend URL, e.g. `https://webuyam.vercel.app` |
+
+   > For multiple allowed origins, comma-separate them: `https://webuyam.vercel.app,https://staging.webuyam.vercel.app`
+
+4. **Deploy** — Render runs `npm install && npm run build` then `npm start`.
+
+5. **Verify** the health check endpoint once the deploy is live:
+   ```bash
+   curl https://<your-render-slug>.onrender.com/api/health
+   # → {"status":"ok","env":"production"}
+   ```
+
+### What `render.yaml` configures
+
+| Field | Value |
+|---|---|
+| Service type | Web Service |
+| Environment | Node |
+| Root directory | `backend/` |
+| Build command | `npm install && npm run build` |
+| Start command | `npm start` (runs `node dist/index.js`) |
+| Health check path | `/api/health` |
+| `NODE_ENV` | `production` (set automatically) |
+| `PORT` | Injected by Render — do not set manually |
