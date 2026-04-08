@@ -37,7 +37,7 @@ const userSchema = new Schema<IUserDocument>(
 // Never expose passwordHash in JSON responses
 userSchema.set('toJSON', {
   transform: (_doc, ret) => {
-    delete ret['passwordHash'];
+    delete (ret as { passwordHash?: string })['passwordHash'];
     return ret;
   },
 });
