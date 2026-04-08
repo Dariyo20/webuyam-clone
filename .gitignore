@@ -1,0 +1,27 @@
+# Assessment-only files — never push these
+BRIEF.md
+screenshots/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+
+# Environment files — never commit secrets
+.env
+.env.local
+.env.production
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# TypeScript cache
+*.tsbuildinfo
