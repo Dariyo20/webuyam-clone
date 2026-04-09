@@ -1,3 +1,5 @@
+import { Minus, Plus } from 'lucide-react';
+
 interface QuantityStepperProps {
   value: number;
   onChange: (n: number) => void;
@@ -14,33 +16,29 @@ export function QuantityStepper({
   disabled = false,
 }: QuantityStepperProps) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center border border-gray-300 rounded-md overflow-hidden w-fit">
       <button
         type="button"
         onClick={() => onChange(Math.max(min, value - 1))}
         disabled={disabled || value <= min}
-        className="w-8 h-8 rounded-md border border-gray-300 flex items-center justify-center text-gray-700 font-bold text-lg
-          hover:bg-gray-100 transition-colors
-          disabled:opacity-40 disabled:cursor-not-allowed"
+        className="px-3 py-2 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Decrease quantity"
       >
-        −
+        <Minus size={16} strokeWidth={2} />
       </button>
 
-      <span className="w-10 text-center text-base font-semibold text-gray-900 select-none">
+      <div className="px-4 py-2 min-w-[3rem] text-center select-none text-sm font-semibold text-gray-900">
         {value}
-      </span>
+      </div>
 
       <button
         type="button"
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={disabled || value >= max}
-        className="w-8 h-8 rounded-md border border-gray-300 flex items-center justify-center text-gray-700 font-bold text-lg
-          hover:bg-gray-100 transition-colors
-          disabled:opacity-40 disabled:cursor-not-allowed"
+        className="px-3 py-2 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Increase quantity"
       >
-        +
+        <Plus size={16} strokeWidth={2} />
       </button>
     </div>
   );

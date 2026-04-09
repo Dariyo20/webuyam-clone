@@ -5,14 +5,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Sidebar cream/green tint — matches #f0f5ee from BRIEF.md
         sidebar: '#f0f5ee',
-        // Primary green accent (maps to Tailwind green-600 for easy overrides)
+        'brand-green-light': '#4A9D44',
+        'brand-green-dark':  '#0D5F07',
         accent: {
-          DEFAULT: '#16a34a', // green-600
-          hover: '#15803d',   // green-700
-          light: '#dcfce7',   // green-100
+          DEFAULT: '#16a34a',
+          hover: '#15803d',
+          light: '#dcfce7',
         },
+      },
+      fontFamily: {
+        raleway: ['Raleway', 'sans-serif'],
+      },
+      animation: {
+        'ping-slow': 'ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
     },
   },

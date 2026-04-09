@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Check } from 'lucide-react';
+import { ShoppingCart, Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import type { Product } from '../types';
 import { useAddToCart } from '../hooks/useAddToCart';
+import { getApiError } from '../lib/getApiError';
 
 interface ProductCardProps {
   product: Product;
@@ -20,7 +22,6 @@ const placeholderFor = (name: string) => {
 export function ProductCard({ product }: ProductCardProps) {
   const navigate = useNavigate();
   const [imgSrc, setImgSrc] = useState(product.image);
-  const [added, setAdded] = useState(false);
   const addToCart = useAddToCart();
 
   const handleNavigate = () => {
@@ -32,10 +33,8 @@ export function ProductCard({ product }: ProductCardProps) {
     addToCart.mutate(
       { productId: product._id, quantity: 1 },
       {
-        onSuccess: () => {
-          setAdded(true);
-          setTimeout(() => setAdded(false), 1500);
-        },
+        onSuccess: () => toast.success('Item added to cart!'),
+        onError: (err) => toast.error(getApiError(err)),
       }
     );
   };
@@ -64,21 +63,23 @@ export function ProductCard({ product }: ProductCardProps) {
         >
           {product.name}
         </p>
-        <p className="font-bold text-xl text-gray-900">{formatNaira(product.price)}</p>
+        <p className="text-lg font-bold text-gray-900">{formatNaira(product.price)}</p>
 
         <button
           onClick={handleAddToCart}
           disabled={addToCart.isPending}
-          className="mt-auto w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 rounded-lg transition-colors disabled:opacity-70"
+          className="mt-auto w-full flex items-center justify-center gap-2 text-white text-sm font-medium py-2 rounded-lg transition-colors disabled:opacity-60
+            bg-gradient-to-b from-[#4A9D44] to-[#0D5F07] hover:from-[#3d8a37] hover:to-[#0a4a05]
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4A9D44]"
         >
-          {added ? (
+          {addToCart.isPending ? (
             <>
-              <Check size={15} />
-              Added!
+              <Loader2 size={15} className="animate-spin" />
+              Adding...
             </>
           ) : (
             <>
-              <ShoppingCart size={15} />
+              <ShoppingCart size={18} />
               Add to Cart
             </>
           )}

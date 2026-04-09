@@ -5,6 +5,7 @@
 @layer base {
   body {
     @apply text-gray-900 bg-white;
+    font-family: 'Raleway', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

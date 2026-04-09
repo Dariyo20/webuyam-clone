@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Check, ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { useProduct } from '../hooks/useProduct';
 import { useAddToCart } from '../hooks/useAddToCart';
+import { getApiError } from '../lib/getApiError';
 import { QuantityStepper } from '../components/QuantityStepper';
 import { ErrorState } from '../components/ErrorState';
 
@@ -34,15 +36,12 @@ export function ProductDetail() {
   const { data: product, isPending, isError, error, refetch } = useProduct(slug ?? '');
   const addToCart = useAddToCart();
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
 
   if (isPending) return <ProductDetailSkeleton />;
 
   if (isError) {
-    // Check for 404
-    const is404 =
-      error instanceof Error && error.message === 'Product not found';
+    const is404 = error instanceof Error && error.message === 'Product not found';
 
     if (is404) {
       return (
@@ -75,10 +74,8 @@ export function ProductDetail() {
     addToCart.mutate(
       { productId: product._id, quantity },
       {
-        onSuccess: () => {
-          setAdded(true);
-          setTimeout(() => setAdded(false), 1500);
-        },
+        onSuccess: () => toast.success('Added to cart successfully'),
+        onError: (err) => toast.error(getApiError(err)),
       }
     );
   };
@@ -101,17 +98,11 @@ export function ProductDetail() {
           {product.name}
         </h1>
 
-        <p className="text-2xl font-bold text-gray-900">
+        <p className="mt-4 text-lg font-medium text-green-600">
           {formatNaira(product.price)}
         </p>
 
         <p className="text-gray-600 text-sm">{product.unit}</p>
-
-        {product.description && (
-          <p className="text-gray-600 text-sm leading-relaxed">
-            {product.description}
-          </p>
-        )}
 
         <div className="flex items-center gap-4 mt-2">
           <span className="text-base font-medium text-gray-700">Quantity:</span>
@@ -127,19 +118,20 @@ export function ProductDetail() {
         <button
           onClick={handleAddToCart}
           disabled={addToCart.isPending || product.stock === 0}
-          className="mt-4 w-full h-12 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700
-            text-white text-lg font-semibold rounded-lg transition-colors disabled:opacity-70"
+          className="mt-4 w-full h-12 flex items-center justify-center gap-2 text-white text-lg font-semibold rounded-lg transition-colors disabled:opacity-60
+            bg-gradient-to-b from-[#4A9D44] to-[#0D5F07] hover:from-[#3d8a37] hover:to-[#0a4a05]
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4A9D44]"
         >
-          {added ? (
+          {addToCart.isPending ? (
             <>
-              <Check size={20} />
-              Added!
+              <Loader2 size={20} className="animate-spin" />
+              Adding...
             </>
           ) : product.stock === 0 ? (
             'Out of Stock'
           ) : (
             <>
-              <ShoppingCart size={20} />
+              <ShoppingCart size={18} />
               Add to Cart
             </>
           )}

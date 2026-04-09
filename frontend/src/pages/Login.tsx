@@ -54,7 +54,7 @@ export function Login() {
         {/* Logo */}
         <div className="flex items-center mb-8">
           <span className="text-2xl font-extrabold text-gray-900">WE</span>
-          <span className="ml-1 bg-green-600 text-white text-2xl font-extrabold px-2 py-0.5 rounded-md">
+          <span className="ml-1 bg-[#0D5F07] text-white text-2xl font-extrabold px-2 py-0.5 rounded-md">
             BUY
           </span>
         </div>
@@ -102,7 +102,9 @@ export function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
+            className="w-full disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg text-sm
+              bg-gradient-to-b from-[#4A9D44] to-[#0D5F07] hover:from-[#3d8a37] hover:to-[#0a4a05]
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4A9D44] transition-colors"
           >
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
@@ -110,7 +112,7 @@ export function Login() {
 
         <p className="text-sm text-gray-500 text-center mt-6">
           Don&apos;t have an account?{' '}
-          <Link to="/register" className="text-green-600 font-medium hover:underline">
+          <Link to="/register" className="text-[#0D5F07] font-medium hover:underline">
             Create one
           </Link>
         </p>
