@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Home,
@@ -8,20 +9,20 @@ import {
   Users,
   ChevronRight,
 } from 'lucide-react';
-
-interface SidebarProps {
-  cartCount: number;
-}
+import { useCart } from '../hooks/useCart';
 
 interface NavItem {
   label: string;
   to: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   badge?: number;
   chevron?: boolean;
 }
 
-export function Sidebar({ cartCount }: SidebarProps) {
+export function Sidebar() {
+  const { data: cart } = useCart();
+  const cartCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+
   const navItems: NavItem[] = [
     { label: 'Home', to: '/dashboard/home', icon: <Home size={18} /> },
     { label: 'Shop', to: '/dashboard/shop', icon: <ShoppingBag size={18} /> },
