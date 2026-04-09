@@ -29,7 +29,7 @@ export function Topbar({ user, onToggleSidebar }: TopbarProps) {
 
       {/* User info */}
       <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-gray-700">{user?.name ?? 'Guest'}</span>
+        <span className="text-base font-medium text-gray-700">{user?.name ?? 'Guest'}</span>
         <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xs font-bold flex items-center justify-center select-none">
           {initials}
         </div>

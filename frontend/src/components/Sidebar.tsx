@@ -59,9 +59,9 @@ export function Sidebar() {
             key={item.label}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              `flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
                 isActive
-                  ? 'bg-green-100 text-green-800'
+                  ? 'bg-green-200 text-green-900 border-l-4 border-green-600 font-semibold'
                   : 'text-gray-600 hover:bg-green-50 hover:text-gray-900'
               }`
             }

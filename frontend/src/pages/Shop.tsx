@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { ProductCard } from '../components/ProductCard';
@@ -8,7 +8,9 @@ import { ErrorState } from '../components/ErrorState';
 import { Pagination } from '../components/Pagination';
 
 export function Shop() {
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rawPage = parseInt(searchParams.get('page') ?? '1', 10);
+  const page = isNaN(rawPage) || rawPage < 1 ? 1 : rawPage;
   const { data, isPending, isError, refetch } = useProducts(page);
 
   if (isPending) {
@@ -52,7 +54,7 @@ export function Shop() {
         <Pagination
           currentPage={page}
           totalPages={data.meta.totalPages}
-          onPageChange={setPage}
+          onPageChange={(newPage) => setSearchParams({ page: String(newPage) })}
         />
       )}
     </div>

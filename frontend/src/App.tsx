@@ -5,6 +5,8 @@ import { DashboardLayout } from './layouts/DashboardLayout';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Shop } from './pages/Shop';
+import { ProductDetail } from './pages/ProductDetail';
+import { Cart } from './pages/Cart';
 
 function RootRedirect() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -23,6 +25,8 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route path="shop" element={<Shop />} />
+            <Route path="products/:slug" element={<ProductDetail />} />
+            <Route path="cart" element={<Cart />} />
             {/* Catch-all inside dashboard → shop */}
             <Route path="*" element={<Navigate to="/dashboard/shop" replace />} />
           </Route>
