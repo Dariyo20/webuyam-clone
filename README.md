@@ -6,7 +6,7 @@ A recreation of the webuyam.com Shop experience, built as a technical assessment
 
 | | URL |
 |---|---|
-| Frontend | *(deploy to Vercel and paste URL here)* |
+| Frontend | https://webuyam-clone.vercel.app |
 | Backend API | https://webuyam-clone.onrender.com |
 | Health check | https://webuyam-clone.onrender.com/api/health |
 | Test credentials | Register a new account via the UI |
