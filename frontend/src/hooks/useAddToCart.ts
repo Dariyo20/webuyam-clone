@@ -21,7 +21,7 @@ export function useAddToCart() {
       queryClient.setQueryData<Cart | null>(['cart'], (old) => {
         if (!old) return old;
         const existingIndex = old.items.findIndex(
-          (item) => item.productId._id === productId
+          (item) => item.productId != null && item.productId._id === productId
         );
         if (existingIndex !== -1) {
           const updatedItems = old.items.map((item, idx) =>

@@ -31,6 +31,17 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
     cart = await Cart.findById(newCart._id).populate('items.productId').lean();
   }
 
+  // Strip stale items whose product was deleted (e.g. after a re-seed)
+  if (cart && cart.items.some((item) => item.productId == null)) {
+    const staleIds = cart.items
+      .filter((item) => item.productId == null)
+      .map((item) => item._id);
+    await Cart.updateOne({ userId }, {
+      $pull: { items: { _id: { $in: staleIds } } },
+    });
+    cart = await Cart.findOne({ userId }).populate('items.productId').lean();
+  }
+
   res.json({ success: true, data: cart });
 });
 

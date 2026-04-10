@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files — never commit secrets
+.env
+.env.local
+.env.production
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Editor / OS
+.DS_Store
+Thumbs.db

@@ -82,7 +82,10 @@ export function Cart() {
     );
   }
 
-  const subtotal = cart.items.reduce(
+  // Filter out items whose product was deleted (e.g. after a re-seed)
+  const validItems = cart.items.filter((item) => item.productId != null);
+
+  const subtotal = validItems.reduce(
     (sum, item) => sum + item.productId.price * item.quantity,
     0
   );
@@ -95,14 +98,14 @@ export function Cart() {
       <div className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl p-6">
         {/* Header */}
         <h2 className="text-2xl font-bold text-[#0D5F07] mb-4">
-          Shopping Cart ({cart.items.length}{' '}
-          {cart.items.length === 1 ? 'item' : 'items'})
+          Shopping Cart ({validItems.length}{' '}
+          {validItems.length === 1 ? 'item' : 'items'})
         </h2>
         <div className="border-t border-gray-200" />
 
         {/* Items */}
         <div className="divide-y divide-gray-200">
-          {cart.items.map((item) => {
+          {validItems.map((item) => {
             const product = item.productId;
             const lineTotal = product.price * item.quantity;
 
